@@ -17,6 +17,8 @@ namespace CarRepairShop.web.Data.Entities
 
         public string Color { get; set; }   
 
-        public int Year { get; set; }       
+        public int Year { get; set; }
+
+        public User User { get; set; }
     }
 }

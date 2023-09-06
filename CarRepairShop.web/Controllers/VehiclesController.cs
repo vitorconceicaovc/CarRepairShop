@@ -1,6 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using CarRepairShop.web.Data;
 using CarRepairShop.web.Data.Entities;
+using CarRepairShop.web.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,16 +11,21 @@ namespace SuperShop.Controllers
     public class VehiclesController : Controller
     {
         private readonly IVehicleRepository _vehicleRepository;
+        private readonly IUserHelper _userHelper;
 
-        public VehiclesController(IVehicleRepository vehicleRepository)
+        public VehiclesController(
+            IVehicleRepository vehicleRepository,
+            IUserHelper userHelper
+            )
         {
             _vehicleRepository = vehicleRepository;
+            _userHelper = userHelper;
         }
 
         // GET: Vehicles
         public IActionResult Index()
         {
-            return View(_vehicleRepository.GetAll());
+            return View(_vehicleRepository.GetAll().OrderBy(v => v.CarPlate));
         }
 
         // GET: Vehicles/Details/5
@@ -54,6 +61,8 @@ namespace SuperShop.Controllers
         {
             if (ModelState.IsValid)
             {
+                //TODO: MODIFICAR PARA O USER QUE TIVER LOGADO
+                vehicle.User = await _userHelper.GetUserByEmailAsync("admin@gmail.com");
                 await _vehicleRepository.CreateAsync(vehicle);
                 return RedirectToAction(nameof(Index));
             }
@@ -93,6 +102,8 @@ namespace SuperShop.Controllers
             {
                 try
                 {
+                    //TODO: MODIFICAR PARA O USER QUE TIVER LOGADO
+                    vehicle.User = await _userHelper.GetUserByEmailAsync("admin@gmail.com");
                     await _vehicleRepository.UpdateAsync(vehicle);
                 }
                 catch (DbUpdateConcurrencyException)
