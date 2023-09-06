@@ -6,6 +6,8 @@ namespace CarRepairShop.web.Data.Entities
     {
         public int Id { get; set; }
 
+        [Required]
+        [MaxLength(8, ErrorMessage = "The field {0} can contain {1} characters length.")]
         [Display(Name = "Car Plate")]
         public string CarPlate { get; set; }
 
