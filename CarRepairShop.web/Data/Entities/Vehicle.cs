@@ -2,7 +2,7 @@
 
 namespace CarRepairShop.web.Data.Entities
 {
-    public class Vehicle
+    public class Vehicle : IEntity
     {
         public int Id { get; set; }
 

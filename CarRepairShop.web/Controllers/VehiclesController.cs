@@ -8,28 +8,28 @@ namespace SuperShop.Controllers
 {
     public class VehiclesController : Controller
     {
-        private readonly IRepository _repository;
+        private readonly IVehicleRepository _vehicleRepository;
 
-        public VehiclesController(IRepository repository)
+        public VehiclesController(IVehicleRepository vehicleRepository)
         {
-            _repository = repository;
+            _vehicleRepository = vehicleRepository;
         }
 
         // GET: Vehicles
         public IActionResult Index()
         {
-            return View(_repository.GetVehicles());
+            return View(_vehicleRepository.GetAll());
         }
 
         // GET: Vehicles/Details/5
-        public IActionResult Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var vehicle = _repository.GetVehicle(id.Value);
+            var vehicle = await _vehicleRepository.GetByIdAsync(id.Value);
 
             if (vehicle == null)
             {
@@ -54,22 +54,21 @@ namespace SuperShop.Controllers
         {
             if (ModelState.IsValid)
             {
-                _repository.AddVehicle(vehicle);
-                await _repository.SaveAllAsync();
+                await _vehicleRepository.CreateAsync(vehicle);
                 return RedirectToAction(nameof(Index));
             }
             return View(vehicle);
         }
 
         // GET: Vehicles/Edit/5
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var vehicle = _repository.GetVehicle(id.Value);
+            var vehicle = await _vehicleRepository.GetByIdAsync(id.Value);
 
             if (vehicle == null)
             {
@@ -94,12 +93,11 @@ namespace SuperShop.Controllers
             {
                 try
                 {
-                    _repository.UpdateVehicle(vehicle);
-                    await _repository.SaveAllAsync();
+                    await _vehicleRepository.UpdateAsync(vehicle);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!_repository.VehicleExists(vehicle.Id))
+                    if (!await _vehicleRepository.ExistAsync(vehicle.Id))
                     {
                         return NotFound();
                     }
@@ -114,14 +112,14 @@ namespace SuperShop.Controllers
         }
 
         // GET: Vehicles/Delete/5
-        public IActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var vehicle = _repository.GetVehicle(id.Value);
+            var vehicle = await _vehicleRepository.GetByIdAsync(id.Value);
 
             if (vehicle == null)
             {
@@ -136,9 +134,8 @@ namespace SuperShop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var vehicle = _repository.GetVehicle(id);
-            _repository.RemoveVehicle(vehicle);
-            await _repository.SaveAllAsync();
+            var vehicle = await _vehicleRepository.GetByIdAsync(id);
+            await _vehicleRepository.DeleteAsync(vehicle);
             return RedirectToAction(nameof(Index));
         }
     }

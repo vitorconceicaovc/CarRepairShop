@@ -27,7 +27,7 @@ namespace CarRepairShop.web
             });
 
             services.AddTransient<SeedDb>();
-            services.AddScoped<IRepository, Repository>();
+            services.AddScoped<IVehicleRepository, VehicleRepository>();
             services.AddControllersWithViews();
         }
 
