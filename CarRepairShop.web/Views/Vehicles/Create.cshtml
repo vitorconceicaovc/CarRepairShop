@@ -1,12 +1,10 @@
-﻿@model CarRepairShop.web.Data.Entities.Vehicle
+﻿@model CarRepairShop.web.Models.VehicleViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create new Vehicle";
 }
 
-<h1>Create</h1>
-
-<h4>Product</h4>
+<h1>Create new vehicle</h1>
 
 <hr />
 
@@ -40,11 +38,11 @@
 
             <div class="form-group">
 
-                <label asp-for="Model" class="control-label"></label>
+                <label asp-for="CarModel" class="control-label"></label>
 
-                <input asp-for="Model" class="form-control" />
+                <input asp-for="CarModel" class="form-control" />
 
-                <span asp-validation-for="Model" class="text-danger"></span>
+                <span asp-validation-for="CarModel" class="text-danger"></span>
 
             </div>
 
@@ -66,6 +64,12 @@
 
                 <span asp-validation-for="Year" class="text-danger"></span>
 
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ImageFile" class="control-label"></label>
+                <input asp-for="ImageFile" class="form-control" type="file" />
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
             </div>
 
             <div class="form-group">

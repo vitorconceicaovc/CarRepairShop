@@ -64,7 +64,7 @@ namespace CarRepairShop.web.Data
             {
                 CarPlate = plate,
                 Brand = brand,
-                Model = model,
+                CarModel = model,
                 Color = color,
                 Year = year,
                 User = user

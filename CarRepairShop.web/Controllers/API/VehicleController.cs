@@ -17,7 +17,7 @@ namespace CarRepairShop.web.Controllers.API
         [HttpGet]
         public IActionResult GetVeicles()
         {
-            return Ok(_vehicleRepository.GetAll());
+            return Ok(_vehicleRepository.GetAllWithUsers());
         }
     }
 }

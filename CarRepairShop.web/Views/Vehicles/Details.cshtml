@@ -24,10 +24,10 @@
 					@Html.DisplayFor(model => model.Brand)
 				</dd>
 				<dt class="col-sm-3">
-					@Html.DisplayNameFor(model => model.Model)
+					@Html.DisplayNameFor(model => model.CarModel)
 				</dt>
 				<dd class="col-sm-9">
-					@Html.DisplayFor(model => model.Model)
+					@Html.DisplayFor(model => model.CarModel)
 				</dd>
 				<dt class="col-sm-3">
 					@Html.DisplayNameFor(model => model.Color)
@@ -42,6 +42,12 @@
 					@Html.DisplayFor(model => model.Year)
 				</dd>
 			</dl>
+		</div>
+		<div class="col-md-4">
+			@if (!string.IsNullOrEmpty(Model.ImageUrl))
+			{
+				<img src="@Url.Content(Model.ImageUrl)" alt="Image" style="width:300px; height:450px;max-width:100%;height:auto">
+			}
 		</div>
 	</div>
 </div>

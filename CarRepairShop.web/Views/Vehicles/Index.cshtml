@@ -19,13 +19,16 @@
                 @Html.DisplayNameFor(model => model.Brand)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Model)
+                @Html.DisplayNameFor(model => model.CarModel)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Color)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Year)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ImageUrl)
             </th>
             <th></th>
         </tr>
@@ -41,13 +44,19 @@
                     @Html.DisplayFor(modelItem => item.Brand)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Model)
+                    @Html.DisplayFor(modelItem => item.CarModel)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Color)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Year)
+                </td>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.ImageUrl))
+                    {
+                        <img src="@Url.Content(item.ImageUrl)" alt="Image" style="width:100px; height:150px;max-width:100%;height:auto">
+                    }
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>

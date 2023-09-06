@@ -1,9 +1,10 @@
-﻿using CarRepairShop.web.Data.Entities;
+﻿using System.Linq;
+using CarRepairShop.web.Data.Entities;
 
 namespace CarRepairShop.web.Data
 {
     public interface IVehicleRepository : IGenericRepository<Vehicle>
     {
-        
+        public IQueryable GetAllWithUsers();
     }
 }
