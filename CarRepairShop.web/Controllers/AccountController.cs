@@ -75,6 +75,8 @@ namespace CarRepairShop.web.Controllers
                         UserName = model.Username
                     };
 
+                    //TODO: adicionar Role "Customer"
+
                     var result = await _userHelper.AddUserAsync(user, model.Password);
 
                     if (result != IdentityResult.Success)
