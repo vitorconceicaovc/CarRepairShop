@@ -80,8 +80,7 @@ namespace CarRepairShop.Web.Controllers
 
                 var vehicle = _converterHelper.ToVehicle(model, path, true);
 
-                //TODO: MODIFICAR PARA O USER QUE TIVER LOGADO
-                vehicle.User = await _userHelper.GetUserByEmailAsync("admin@gmail.com");
+                vehicle.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
                 await _vehicleRepository.CreateAsync(vehicle);
                 return RedirectToAction(nameof(Index));
             }
@@ -132,8 +131,7 @@ namespace CarRepairShop.Web.Controllers
 
                     var vehicle = _converterHelper.ToVehicle(model, path, false);
 
-                    //TODO: MODIFICAR PARA O USER QUE TIVER LOGADO
-                    vehicle.User = await _userHelper.GetUserByEmailAsync("admin@gmail.com");
+                    vehicle.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
                     await _vehicleRepository.UpdateAsync(vehicle);
                 }
                 catch (DbUpdateConcurrencyException)
