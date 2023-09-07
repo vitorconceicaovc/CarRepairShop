@@ -15,14 +15,20 @@ namespace CarRepairShop.Web.Controllers
     {
         private readonly IVehicleRepository _vehicleRepository;
         private readonly IUserHelper _userHelper;
+        private readonly IImageHelper _imageHelper;
+        private readonly IConverterHelper _converterHelper;
 
         public VehiclesController(
             IVehicleRepository bookRepository,
-            IUserHelper userHelper
+            IUserHelper userHelper,
+            IImageHelper imageHelper,
+            IConverterHelper converterHelper
             )
         {
             _vehicleRepository = bookRepository;
             _userHelper = userHelper;
+            _imageHelper = imageHelper;
+            _converterHelper = converterHelper;
         }
 
         // GET: Vehicles
@@ -70,24 +76,10 @@ namespace CarRepairShop.Web.Controllers
                 if (model.ImageFile != null && model.ImageFile.Length > 0)
                 {
 
-                    var guid = Guid.NewGuid().ToString();
-                    var file = $"{guid}.jpg";
-
-                    path = Path.Combine(
-                            Directory.GetCurrentDirectory(),
-                            "wwwroot\\images\\vehicles",
-                            file
-                        );
-
-                    using (var stream = new FileStream(path, FileMode.Create))
-                    {
-                        await model.ImageFile.CopyToAsync(stream);
-                    }
-
-                    path = $"~/images/vehicles/{file}";
+                    path = await _imageHelper.UploadImageAsync(model.ImageFile, "vehicles");
                 }
 
-                var vehicle = this.ToVehicle(model, path);
+                var vehicle = _converterHelper.ToVehicle(model, path, true);
 
                 //TODO: MODIFICAR PARA O USER QUE TIVER LOGADO
                 vehicle.User = await _userHelper.GetUserByEmailAsync("admin@gmail.com");
@@ -95,21 +87,6 @@ namespace CarRepairShop.Web.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(model);
-        }
-
-        private Vehicle ToVehicle(VehicleViewModel model, string path)
-        {
-            return new Vehicle
-            {
-                Id = model.Id,
-                CarPlate = model.CarPlate,
-                Brand = model.Brand,
-                CarModel = model.CarModel,
-                Color = model.Color,
-                Year = model.Year,
-                ImageUrl = path,
-                User = model.User
-            };
         }
 
         // GET: Vehicles/Edit/5
@@ -127,24 +104,9 @@ namespace CarRepairShop.Web.Controllers
                 return NotFound();
             }
 
-            var model = this.ToVehicleViewModel(vehicle);
+            var model = _converterHelper.ToVehicleViewModel(vehicle);
             return View(model);
 
-        }
-
-        private VehicleViewModel ToVehicleViewModel(Vehicle vehicle)
-        {
-            return new VehicleViewModel
-            {
-                Id = vehicle.Id,
-                CarPlate = vehicle.CarPlate,
-                Brand = vehicle.Brand,
-                CarModel = vehicle.CarModel,  
-                Color = vehicle.Color,
-                Year = vehicle.Year,
-                ImageUrl = vehicle.ImageUrl,
-                User = vehicle.User
-            };
         }
 
         // POST: Vehicles/Edit/5
@@ -165,25 +127,11 @@ namespace CarRepairShop.Web.Controllers
                     if (model.ImageFile != null && model.ImageFile.Length > 0)
                     {
 
-                        var guid = Guid.NewGuid().ToString();
-                        var file = $"{guid}.jpg";
-
-                        path = Path.Combine(
-                                Directory.GetCurrentDirectory(),
-                                "wwwroot\\images\\vehicles",
-                                file
-                            );
-
-                        using (var stream = new FileStream(path, FileMode.Create))
-                        {
-                            await model.ImageFile.CopyToAsync(stream);
-                        }
-
-                        path = $"~/images/vehicles/{file}";
+                        path = await _imageHelper.UploadImageAsync(model.ImageFile, "vehicles");
 
                     }
 
-                    var vehicle = this.ToVehicle(model, path);
+                    var vehicle = _converterHelper.ToVehicle(model, path, false);
 
                     //TODO: MODIFICAR PARA O USER QUE TIVER LOGADO
                     vehicle.User = await _userHelper.GetUserByEmailAsync("admin@gmail.com");
