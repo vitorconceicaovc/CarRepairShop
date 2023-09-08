@@ -41,14 +41,14 @@ namespace CarRepairShop.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("VehicleNotFound");
             }
 
             var vehicle = await _vehicleRepository.GetByIdAsync(id.Value);
 
             if (vehicle == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("VehicleNotFound");
             }
 
             return View(vehicle);
@@ -92,14 +92,14 @@ namespace CarRepairShop.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("VehicleNotFound");
             }
 
             var vehicle = await _vehicleRepository.GetByIdAsync(id.Value);
 
             if (vehicle == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("VehicleNotFound");
             }
 
             var model = _converterHelper.ToVehicleViewModel(vehicle);
@@ -155,14 +155,14 @@ namespace CarRepairShop.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("VehicleNotFound");
             }
 
             var vehicle = await _vehicleRepository.GetByIdAsync(id.Value);
 
             if (vehicle == null)
             {
-                return NotFound();
+                return new NotFoundViewResult("VehicleNotFound");
             }
 
             return View(vehicle);
@@ -176,6 +176,11 @@ namespace CarRepairShop.Web.Controllers
             var vehicle = await _vehicleRepository.GetByIdAsync(id);
             await _vehicleRepository.DeleteAsync(vehicle);
             return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult VehicleNotFound()
+        {
+            return View();
         }
     }
 }
