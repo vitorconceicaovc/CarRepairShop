@@ -45,6 +45,7 @@ namespace CarRepairShop.web
             services.AddScoped<IImageHelper, ImageHelper>();
             services.AddScoped<IConverterHelper, ConverterHelper>();
             services.AddScoped<IVehicleRepository, VehicleRepository>();
+            services.AddScoped<IServiceRepository, ServiceRepository>();
 
             services.ConfigureApplicationCookie(options =>
             {

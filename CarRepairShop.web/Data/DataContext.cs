@@ -8,6 +8,7 @@ namespace CarRepairShop.web.Data
     {
 
         public DbSet<Vehicle> Vehicles { get; set; }
+        public DbSet<Service> Services { get; set; }
 
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
