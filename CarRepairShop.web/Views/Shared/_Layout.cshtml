@@ -40,18 +40,8 @@
                                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
                                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                         <li><a class="dropdown-item" asp-area="" asp-controller="" asp-action="">Users</a></li>
-                                        <li><a class="dropdown-item" asp-area="" asp-controller="Vehicles" asp-action="Index">Vehicles</a></li>
-                                        <li><a class="dropdown-item" asp-area="" asp-controller="" asp-action="">Roles</a></li>
-                                    </ul>
-                                </li>
-                            }
-
-                            @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Customer"))
-                            {
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Customer</a>
-                                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <li><a class="dropdown-item" asp-area="" asp-controller="Vehicles" asp-action="Index">Vehicles</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="" asp-action="">Mechanics</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="" asp-action="">Services</a></li>
                                     </ul>
                                 </li>
                             }
@@ -62,6 +52,19 @@
                                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Mechanic</a>
                                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                         <li><a class="dropdown-item" asp-area="" asp-controller="Vehicles" asp-action="Index">Vehicles</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="" asp-action="Index">service history</a></li>
+                                    </ul>
+                                </li>
+                            }
+
+                            @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Customer"))
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Customer</a>
+                                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="" asp-action="Index">My Vehicles</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="" asp-action="Index">Appointment</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="" asp-action="Index">service history</a></li>
                                     </ul>
                                 </li>
                             }
