@@ -1,0 +1,58 @@
+﻿@model CarRepairShop.web.Data.Entities.Vehicle
+
+@{
+	ViewData["Title"] = "Details";
+}
+
+<h1>Vehicle Details</h1>
+
+<div>
+	<hr />
+	<div class="row">
+		<div class="col-md-8">
+			<dl class="row">
+				<dt class="col-sm-3">
+					@Html.DisplayNameFor(model => model.CarPlate)
+				</dt>
+				<dd class="col-sm-9">
+					@Html.DisplayFor(model => model.CarPlate)
+				</dd>
+				<dt class="col-sm-3">
+					@Html.DisplayNameFor(model => model.Brand)
+				</dt>
+				<dd class="col-sm-9">
+					@Html.DisplayFor(model => model.Brand)
+				</dd>
+				<dt class="col-sm-3">
+					@Html.DisplayNameFor(model => model.CarModel)
+				</dt>
+				<dd class="col-sm-9">
+					@Html.DisplayFor(model => model.CarModel)
+				</dd>
+				<dt class="col-sm-3">
+					@Html.DisplayNameFor(model => model.Color)
+				</dt>
+				<dd class="col-sm-9">
+					@Html.DisplayFor(model => model.Color)
+				</dd>
+				<dt class="col-sm-3">
+					@Html.DisplayNameFor(model => model.Year)
+				</dt>
+				<dd class="col-sm-9">
+					@Html.DisplayFor(model => model.Year)
+				</dd>
+			</dl>
+		</div>
+		<div class="col-md-4">
+			@if (!string.IsNullOrEmpty(Model.ImageUrl))
+			{
+				<img src="@Url.Content(Model.ImageUrl)" alt="Image" style="width:300px; height:450px;max-width:100%;height:auto">
+			}
+		</div>
+	</div>
+</div>
+
+<div>
+	<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+	<a asp-action="Index" class="btn btn-success">Back to List</a>
+</div>

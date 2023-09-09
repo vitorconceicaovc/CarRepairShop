@@ -1,6 +1,7 @@
 ﻿using CarRepairShop.web.Data;
 using CarRepairShop.web.Helpers;
 using CarRepairShop.web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -16,18 +17,19 @@ namespace CarRepairShop.Web.Controllers
         private readonly IConverterHelper _converterHelper;
 
         public VehiclesController(
-            IVehicleRepository bookRepository,
+            IVehicleRepository vehicleRepository,
             IUserHelper userHelper,
             IImageHelper imageHelper,
             IConverterHelper converterHelper
             )
         {
-            _vehicleRepository = bookRepository;
+            _vehicleRepository = vehicleRepository;
             _userHelper = userHelper;
             _imageHelper = imageHelper;
             _converterHelper = converterHelper;
         }
 
+        [Authorize(Roles = "Mechanic")]
         // GET: Vehicles
         public IActionResult Index()
         {
@@ -52,6 +54,7 @@ namespace CarRepairShop.Web.Controllers
             return View(vehicle);
         }
 
+        [Authorize(Roles = "Customer")]
         // GET: Vehicles/Create
         public IActionResult Create()
         {
@@ -129,7 +132,7 @@ namespace CarRepairShop.Web.Controllers
 
                     var vehicle = _converterHelper.ToVehicle(model, path, false);
 
-                    vehicle.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
+                    //vehicle.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
                     await _vehicleRepository.UpdateAsync(vehicle);
                 }
                 catch (DbUpdateConcurrencyException)

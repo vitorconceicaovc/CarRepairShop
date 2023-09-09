@@ -114,8 +114,6 @@ namespace CarRepairShop.web.Data
                 AddVehicle("28-24-GH", "Opel", "Corsa", "Yellow", 2003, customerUser);
                 AddVehicle("23-VH-90", "Nisan", "Susano", "Red", 2006, customerUser);
                 AddVehicle("12-29-TT", "Mercedes", "Ben10", "Gray", 2012, customerUser);
-                AddVehicle("21-FF-R3", "Trator", "Supra", "Black", 1995, customerUser);
-                AddVehicle("63-29-Y7", "Granda", "Carro", "Green", 2022, customerUser);
 
                 await _context.SaveChangesAsync();
             }
