@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRepairShop.web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230909202008_AddAppointments")]
+    [Migration("20230911100022_AddAppointments")]
     partial class AddAppointments
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,28 +28,81 @@ namespace CarRepairShop.web.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime?>("AppointmentDate")
+                    b.Property<DateTime>("AppointmentDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Observation")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int?>("ServiceId")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("DeliveryDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ServiceId");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("Appointments");
+                });
+
+            modelBuilder.Entity("CarRepairShop.web.Data.Entities.AppointmentDetail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("AppointmentId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<double>("Quantity")
+                        .HasColumnType("float");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("VehicleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppointmentId");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("VehicleId");
+
+                    b.ToTable("AppointmentDetails");
+                });
+
+            modelBuilder.Entity("CarRepairShop.web.Data.Entities.AppointmentDetailTemp", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<double>("Quantity")
+                        .HasColumnType("float");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("VehicleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("VehicleId");
+
+                    b.ToTable("AppointmentDetailsTemp");
                 });
 
             modelBuilder.Entity("CarRepairShop.web.Data.Entities.Service", b =>
@@ -311,17 +364,45 @@ namespace CarRepairShop.web.Migrations
 
             modelBuilder.Entity("CarRepairShop.web.Data.Entities.Appointment", b =>
                 {
-                    b.HasOne("CarRepairShop.web.Data.Entities.Service", "Service")
+                    b.HasOne("CarRepairShop.web.Data.Entities.User", "User")
                         .WithMany()
-                        .HasForeignKey("ServiceId");
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("CarRepairShop.web.Data.Entities.AppointmentDetail", b =>
+                {
+                    b.HasOne("CarRepairShop.web.Data.Entities.Appointment", null)
+                        .WithMany("Items")
+                        .HasForeignKey("AppointmentId");
 
                     b.HasOne("CarRepairShop.web.Data.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
 
-                    b.Navigation("Service");
+                    b.HasOne("CarRepairShop.web.Data.Entities.Vehicle", "Vehicle")
+                        .WithMany()
+                        .HasForeignKey("VehicleId");
 
                     b.Navigation("User");
+
+                    b.Navigation("Vehicle");
+                });
+
+            modelBuilder.Entity("CarRepairShop.web.Data.Entities.AppointmentDetailTemp", b =>
+                {
+                    b.HasOne("CarRepairShop.web.Data.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.HasOne("CarRepairShop.web.Data.Entities.Vehicle", "Vehicle")
+                        .WithMany()
+                        .HasForeignKey("VehicleId");
+
+                    b.Navigation("User");
+
+                    b.Navigation("Vehicle");
                 });
 
             modelBuilder.Entity("CarRepairShop.web.Data.Entities.Vehicle", b =>
@@ -382,6 +463,11 @@ namespace CarRepairShop.web.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("CarRepairShop.web.Data.Entities.Appointment", b =>
+                {
+                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }

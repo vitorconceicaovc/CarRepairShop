@@ -47,6 +47,7 @@ namespace CarRepairShop.web
             services.AddScoped<IVehicleRepository, VehicleRepository>();
             services.AddScoped<IMyVehicleRepository, MyVehicleRepository>();
             services.AddScoped<IServiceRepository, ServiceRepository>();
+            services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 
             services.ConfigureApplicationCookie(options =>
             {

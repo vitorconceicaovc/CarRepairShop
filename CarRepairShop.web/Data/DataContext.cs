@@ -12,6 +12,10 @@ namespace CarRepairShop.web.Data
 
         public DbSet<Appointment> Appointments { get; set; }    
 
+        public DbSet<AppointmentDetail> AppointmentDetails { get; set; }
+
+        public DbSet<AppointmentDetailTemp> AppointmentDetailsTemp { get; set; }
+
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
 
