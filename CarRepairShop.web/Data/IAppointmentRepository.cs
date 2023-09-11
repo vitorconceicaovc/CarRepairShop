@@ -7,5 +7,7 @@ namespace CarRepairShop.web.Data
     public interface IAppointmentRepository : IGenericRepository<Appointment>
     {
         Task<IQueryable<Appointment>> GetAppointmentAsync(string userName);
+
+        Task<IQueryable<AppointmentDetailTemp>> GetDetailTempsAsync(string userName);
     }
 }

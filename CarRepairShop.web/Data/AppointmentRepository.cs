@@ -19,6 +19,21 @@ namespace CarRepairShop.web.Data
 
         public IUserHelper UserHelper { get; }
 
+        public async Task<IQueryable<AppointmentDetailTemp>> GetDetailTempsAsync(string userName)
+        {
+            var user = await _userHelper.GetUserByEmailAsync(userName);
+
+            if (user == null)
+            {
+                return null;
+            }
+
+            return _context.AppointmentDetailsTemp
+                .Include(v => v.Vehicle)
+                .Where(a => a.User == user)
+                .OrderBy(v => v.Vehicle.CarPlate);
+        }
+
         public async Task<IQueryable<Appointment>> GetAppointmentAsync(string userName)
         {
             var user = await _userHelper.GetUserByEmailAsync(userName);
