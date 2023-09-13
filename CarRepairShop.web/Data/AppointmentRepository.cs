@@ -117,5 +117,19 @@ namespace CarRepairShop.web.Data
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task DeleteDetailTempAsync(int id)
+        {
+            var appointmentDetailTemp = await _context.AppointmentDetailsTemp.FindAsync(id);
+
+            if (appointmentDetailTemp == null)
+            {
+                return;
+            }
+
+            _context.AppointmentDetailsTemp.Remove(appointmentDetailTemp);
+
+            await _context.SaveChangesAsync();
+        }
     }
 }

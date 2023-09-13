@@ -14,5 +14,7 @@ namespace CarRepairShop.web.Data
         Task AddItemToAppointmentAsync(AddItemViewModel model, string userName);
 
         Task ModifyAppointmentDetailTempQuantityAsync(int id, double quantity);
+
+        Task DeleteDetailTempAsync(int id);
     }
 }
