@@ -1,5 +1,6 @@
 ﻿using CarRepairShop.web.Data.Entities;
 using CarRepairShop.web.Helpers;
+using CarRepairShop.web.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
@@ -55,6 +56,66 @@ namespace CarRepairShop.web.Data
                 .ThenInclude(v => v.Vehicle)
                 .Where(o => o.User == user)
                 .OrderByDescending(o => o.AppointmentDate);
+        }
+
+        public async Task AddItemToAppointmentAsync(AddItemViewModel model, string userName)
+        {
+            var user = await _userHelper.GetUserByEmailAsync(userName);
+
+            if (user == null)
+            {
+                return;
+            }
+
+            var vehicle = await _context.Vehicles.FindAsync(model.VehicleId);
+            var service = await _context.Services.FindAsync(model.ServiceId);
+
+            if (vehicle == null)
+            {
+                return;
+            }
+
+            var appointmentDetailTemp = await _context.AppointmentDetailsTemp
+                .Where(odt => odt.User == user && odt.Vehicle == vehicle)
+                .FirstOrDefaultAsync();
+
+            if (appointmentDetailTemp == null)
+            {
+                appointmentDetailTemp = new AppointmentDetailTemp
+                {
+                    Price = service.Price,
+                    Vehicle = vehicle,
+                    Quantity = model.Quantity,
+                    User = user,
+                };
+
+                _context.AppointmentDetailsTemp.Add(appointmentDetailTemp);
+            }
+            else
+            {
+                appointmentDetailTemp.Quantity += model.Quantity;
+                _context.AppointmentDetailsTemp.Update(appointmentDetailTemp);
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task ModifyAppointmentDetailTempQuantityAsync(int id, double quantity)
+        {
+            var appointmentDetailTemp = await _context.AppointmentDetailsTemp.FindAsync(id);
+
+            if (appointmentDetailTemp == null)
+            {
+                return;
+            }
+
+            appointmentDetailTemp.Quantity += quantity;
+
+            if (appointmentDetailTemp.Quantity > 0)
+            {
+                _context.AppointmentDetailsTemp.Update(appointmentDetailTemp);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

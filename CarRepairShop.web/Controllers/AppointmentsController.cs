@@ -47,5 +47,19 @@ namespace CarRepairShop.web.Controllers
 
             return View(model);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> AddAppointment(AddItemViewModel model)
+        {
+
+            if (ModelState.IsValid)
+            {
+                await _appointmentRepository.AddItemToAppointmentAsync(model, this.User.Identity.Name);
+                return RedirectToAction("Create");
+            }
+
+            return View(model);
+
+        }
     }
 }
