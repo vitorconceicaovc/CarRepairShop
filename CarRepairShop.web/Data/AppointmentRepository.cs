@@ -2,6 +2,7 @@
 using CarRepairShop.web.Helpers;
 using CarRepairShop.web.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -130,6 +131,46 @@ namespace CarRepairShop.web.Data
             _context.AppointmentDetailsTemp.Remove(appointmentDetailTemp);
 
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> ConfirmAppointmentAsync(string userName)
+        {
+            var user = await _userHelper.GetUserByEmailAsync(userName);
+
+            if (user == null)
+            {
+                return false;
+            }
+
+            var appointmentTmps = await _context.AppointmentDetailsTemp
+                .Include(a => a.Vehicle)
+                .Where(a => a.User == user)
+                .ToListAsync();
+
+            if (appointmentTmps == null || appointmentTmps.Count == 0)
+            {
+                return false;
+            }
+
+            var details = appointmentTmps.Select(a => new AppointmentDetail
+            {
+                Price = a.Price,
+                Vehicle = a.Vehicle,
+                Quantity = a.Quantity
+            }).ToList();
+
+            var appointment = new Appointment
+            {
+                AppointmentDate = DateTime.UtcNow,
+                User = user,
+                Items = details
+            };
+
+            await CreateAsync(appointment);
+            _context.AppointmentDetailsTemp.RemoveRange(appointmentTmps);
+            await _context.SaveChangesAsync();
+
+            return true;
         }
     }
 }

@@ -19,13 +19,13 @@
                 </th>
             }
             <th>
-                @Html.DisplayNameFor(model => model.AppointmentDate)
+                @Html.DisplayNameFor(model => model.AppointmentDateLocal)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.DeliveryDate)
             </th>
             <th>
-                # Lines
+                @Html.DisplayNameFor(model => model.Lines)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Quantity)
@@ -47,13 +47,13 @@
                     </th>
                 }
                 <td>
-                    @Html.DisplayFor(modelItem => item.AppointmentDate)
+                    @Html.DisplayFor(modelItem => item.AppointmentDateLocal)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.DeliveryDate)
                 </td>
                 <td>
-                    #
+                    @Html.DisplayFor(modelItem => item.Lines)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Quantity)

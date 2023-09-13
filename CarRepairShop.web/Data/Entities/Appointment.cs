@@ -24,10 +24,17 @@ namespace CarRepairShop.web.Data.Entities
 
         public IEnumerable<AppointmentDetail> Items { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public int Lines => Items == null ? 0 : Items.Count();
+
         [DisplayFormat(DataFormatString = "{0:N2}")]
         public double Quantity => Items == null ? 0 : Items.Sum(i => i.Quantity);
 
         [DisplayFormat(DataFormatString = "{0:C2}")]
         public decimal Value => Items == null ? 0 : Items.Sum(i => i.Value);
+
+        [Display(Name = "Appointment date")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy HH:mm}", ApplyFormatInEditMode = false)]
+        public DateTime? AppointmentDateLocal => this.AppointmentDate == null ? null : this.AppointmentDate.ToLocalTime();
     }
 }

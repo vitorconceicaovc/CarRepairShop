@@ -16,5 +16,7 @@ namespace CarRepairShop.web.Data
         Task ModifyAppointmentDetailTempQuantityAsync(int id, double quantity);
 
         Task DeleteDetailTempAsync(int id);
+
+        Task<bool> ConfirmAppointmentAsync(string userName);
     }
 }

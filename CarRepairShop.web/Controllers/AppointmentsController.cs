@@ -97,5 +97,17 @@ namespace CarRepairShop.web.Controllers
 
             return RedirectToAction("Create");
         }
+
+        public async Task<IActionResult> ConfirmAppointment()
+        {
+            var response = await _appointmentRepository.ConfirmAppointmentAsync(this.User.Identity.Name);
+
+            if (response)
+            {
+                return RedirectToAction("Index");
+            }
+
+            return RedirectToAction("Create");
+        }
     }
 }
