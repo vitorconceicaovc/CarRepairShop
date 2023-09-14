@@ -121,10 +121,9 @@ namespace CarRepairShop.web.Data
                     Value = c.Id.ToString()
                 }).OrderBy(l => l.Text).ToList();
 
-
                 list.Insert(0, new SelectListItem
                 {
-                    Text = "(Select a citie...)",
+                    Text = "(Select a city...)",
                     Value = "0"
                 });
 
