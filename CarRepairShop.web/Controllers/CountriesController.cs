@@ -3,12 +3,11 @@ using CarRepairShop.web.Data.Entities;
 using CarRepairShop.web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
 using System.Threading.Tasks;
 
 namespace CarRepairShop.web.Controllers
 {
-    
+
     [Authorize(Roles = "Admin")]
     public class CountriesController : Controller
     {

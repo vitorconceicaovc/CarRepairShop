@@ -2,7 +2,24 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+<link rel="stylesheet" href="~/css/Home.css" />
+
+<div class="MainContainer">
+
+        <div class="MainInfo">
+            <p>Qualified</p>
+            <h1>Car Repair Shop</h1>
+            <h4>Service Center</h4>
+            <div>
+                <a asp-action="Details" asp-route-id="" class="btn btn-info">Make Appointment</a>
+            </div>
+        </div>
+    
+    <div class="VideoBG">
+        <video autoplay muted loop id="myVideo">
+            <source src="~/videos/homeBgVideo.mp4" type="video/mp4">
+        </video>
+    </div>
+
 </div>
