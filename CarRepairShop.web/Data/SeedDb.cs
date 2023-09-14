@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CarRepairShop.web.Data.Entities;
@@ -28,7 +29,23 @@ namespace CarRepairShop.web.Data
 
             await _userHelper.CheckRoleAsync("Admin");
             await _userHelper.CheckRoleAsync("Customer");
-            await _userHelper.CheckRoleAsync("Mechanic"); 
+            await _userHelper.CheckRoleAsync("Mechanic");
+
+            if (!_context.Countries.Any())
+            {
+                var cities = new List<City>();
+                cities.Add(new City { Name = "Lisboa" });
+                cities.Add(new City { Name = "Porto" });
+                cities.Add(new City { Name = "Faro" });
+
+                _context.Countries.Add(new Country
+                {
+                    Cities = cities,
+                    Name = "Portugal"
+                });
+
+                await _context.SaveChangesAsync();
+            }
 
             var user = await _userHelper.GetUserByEmailAsync("admin@gmail.com");
 
@@ -40,7 +57,10 @@ namespace CarRepairShop.web.Data
                     LastName = "Admin",
                     Email = "admin@gmail.com",
                     UserName = "admin@gmail.com",
-                    PhoneNumber = "913827162"
+                    PhoneNumber = "913827162",
+                    Address = "Rua do Admin",
+                    CityId = _context.Countries.FirstOrDefault().Cities.FirstOrDefault().Id,
+                    City = _context.Countries.FirstOrDefault().Cities.FirstOrDefault()
                 };
 
                 var result = await _userHelper.AddUserAsync(user, "123456");
@@ -64,7 +84,10 @@ namespace CarRepairShop.web.Data
                     LastName = "Mechanic",
                     Email = "mechanic@gmail.com",
                     UserName = "mechanic@gmail.com",
-                    PhoneNumber = "913827162"
+                    PhoneNumber = "913827162",
+                    Address = "Rua do Mechanic",
+                    CityId = _context.Countries.FirstOrDefault().Cities.FirstOrDefault().Id,
+                    City = _context.Countries.FirstOrDefault().Cities.FirstOrDefault()
                 };
 
                 var result = await _userHelper.AddUserAsync(mechanicUser, "123456");
@@ -88,7 +111,10 @@ namespace CarRepairShop.web.Data
                     LastName = "Customer",
                     Email = "customer@gmail.com",
                     UserName = "customer@gmail.com",
-                    PhoneNumber = "937261536"
+                    PhoneNumber = "937261536",
+                    Address = "Rua do Customer",
+                    CityId = _context.Countries.FirstOrDefault().Cities.FirstOrDefault().Id,
+                    City = _context.Countries.FirstOrDefault().Cities.FirstOrDefault()
                 };
 
                 var result = await _userHelper.AddUserAsync(customerUser, "123456");
