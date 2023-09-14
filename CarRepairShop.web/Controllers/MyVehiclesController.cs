@@ -179,9 +179,27 @@ namespace CarRepairShop.web.Controllers
 		public async Task<IActionResult> DeleteConfirmed(int id)
 		{
 			var vehicle = await _myVehicleRepository.GetByIdAsync(id);
-			await _myVehicleRepository.DeleteAsync(vehicle);
-			return RedirectToAction(nameof(Index));
-		}
+
+            try
+            {
+                //throw new Exception("Excepção de Teste");
+                await _myVehicleRepository.DeleteAsync(vehicle);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateException ex)
+            {
+
+                if (ex.InnerException != null && ex.InnerException.Message.Contains("DELETE"))
+                {
+                    ViewBag.ErrorTitle = $"{vehicle.CarPlate} provavelmente está a ser usado!";
+                    ViewBag.ErrorMessage = $"{vehicle.CarPlate} não pode ser apagado visto haverem encomendas que o usam.</br></br>" +
+                        $"Experimente primeiro apagar tdas os serviços que o estão a usar" +
+                        $"e torne novamente a apagá-lo";
+                }
+
+                return View("Error");
+            }
+        }
 
 		public IActionResult VehicleNotFound()
 		{
