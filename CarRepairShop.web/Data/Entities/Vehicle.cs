@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace CarRepairShop.web.Data.Entities
 {
@@ -15,27 +16,17 @@ namespace CarRepairShop.web.Data.Entities
 
         public string CarModel { get; set; }
 
-        public string Color { get; set; }   
+        public string Color { get; set; }
 
         public int Year { get; set; }
 
         [Display(Name = "Image")]
-        public string ImageUrl { get; set; }
+        public Guid ImageId { get; set; }
 
-        public string ImageFullPath
-        {
+        public string ImageFullPath => ImageId == Guid.Empty
 
-            get
-            {
-                if (string.IsNullOrEmpty(ImageUrl))
-                {
-                    return null;
-                }
-
-                return $"https://localhost:44397{ImageUrl.Substring(1)}";
-            }
-
-        }
+           ? "https://carrepairshopweb.azurewebsites.net/images/noimage.jpg"
+           : $"https://carrepairshopcontainer.blob.core.windows.net/vehicles/{ImageId}";
 
         public User User { get; set; }
     }

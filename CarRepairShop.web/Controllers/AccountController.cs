@@ -76,6 +76,7 @@ namespace CarRepairShop.web.Controllers
             if (ModelState.IsValid)
             {
                 var user = await _userHelper.GetUserByEmailAsync(model.Username);
+                await _userHelper.CheckRoleAsync("Customer");
 
                 if (user == null)
                 {
@@ -95,7 +96,6 @@ namespace CarRepairShop.web.Controllers
 
                     };
 
-                    //TODO: adicionar Role "Customer"
 
                     var result = await _userHelper.AddUserAsync(user, model.Password);
 
@@ -111,6 +111,8 @@ namespace CarRepairShop.web.Controllers
                         RememberMe = false,
                         Username = model.Username
                     };
+
+                    await _userHelper.AddUserToRoleAsync(user, "Customer");
 
                     var result2 = await _userHelper.LoginAsync(loginViewModel);
 

@@ -4,6 +4,7 @@ using CarRepairShop.web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Data;
 using System.Linq;
 using System.Security.Claims;
@@ -16,19 +17,19 @@ namespace CarRepairShop.web.Controllers
     {
         private readonly IMyVehicleRepository _myVehicleRepository;
         private readonly IUserHelper _userHelper;
-        private readonly IImageHelper _imageHelper;
+        private readonly IBlobHelper _blobHelper;
         private readonly IConverterHelper _converterHelper;
 
         public MyVehiclesController(
                 IMyVehicleRepository myVehicleRepository,
                 IUserHelper userHelper,
-                IImageHelper imageHelper,
+                IBlobHelper blobHelper,
                 IConverterHelper converterHelper
             )
         {
             _myVehicleRepository = myVehicleRepository;
             _userHelper = userHelper;
-            _imageHelper = imageHelper;
+            _blobHelper = blobHelper;
             _converterHelper = converterHelper;
         }
 
@@ -75,15 +76,15 @@ namespace CarRepairShop.web.Controllers
             if (ModelState.IsValid)
             {
 
-                var path = string.Empty;
+                Guid imageId = Guid.Empty;
 
                 if (model.ImageFile != null && model.ImageFile.Length > 0)
                 {
 
-                    path = await _imageHelper.UploadImageAsync(model.ImageFile, "vehicles");
+                    imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "vehicles");
                 }
 
-                var vehicle = _converterHelper.ToVehicle(model, path, true);
+                var vehicle = _converterHelper.ToVehicle(model, imageId, true);
 
                 vehicle.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
                 await _myVehicleRepository.CreateAsync(vehicle);
@@ -125,16 +126,16 @@ namespace CarRepairShop.web.Controllers
 				try
 				{
 
-					var path = model.ImageUrl;
+                    Guid imageId = model.ImageId;
 
-					if (model.ImageFile != null && model.ImageFile.Length > 0)
-					{
+                    if (model.ImageFile != null && model.ImageFile.Length > 0)
+                    {
 
-						path = await _imageHelper.UploadImageAsync(model.ImageFile, "vehicles");
+                        imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "books");
 
-					}
+                    }
 
-					var vehicle = _converterHelper.ToVehicle(model, path, false);
+                    var vehicle = _converterHelper.ToVehicle(model, imageId, false);
 
 					//vehicle.User = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
 					await _myVehicleRepository.UpdateAsync(vehicle);

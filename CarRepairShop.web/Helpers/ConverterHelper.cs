@@ -1,11 +1,12 @@
 ﻿using CarRepairShop.web.Data.Entities;
 using CarRepairShop.web.Models;
+using System;
 
 namespace CarRepairShop.web.Helpers
 {
     public class ConverterHelper : IConverterHelper
     {
-        public Vehicle ToVehicle(VehicleViewModel model, string path, bool isNew)
+        public Vehicle ToVehicle(VehicleViewModel model, Guid imageId, bool isNew)
         {
             return new Vehicle
             {
@@ -14,8 +15,8 @@ namespace CarRepairShop.web.Helpers
                 Brand = model.Brand,    
                 CarModel = model.CarModel,  
                 Color = model.Color,    
-                Year = model.Year,  
-                ImageUrl = path,
+                Year = model.Year,
+                ImageId = imageId,
                 User = model.User
             };
         }
@@ -30,7 +31,7 @@ namespace CarRepairShop.web.Helpers
                 CarModel = vehicle.CarModel,    
                 Color = vehicle.Color,
                 Year = vehicle.Year,
-                ImageUrl = vehicle.ImageUrl,
+                ImageId = vehicle.ImageId,
                 User = vehicle.User
             };
         }

@@ -40,7 +40,7 @@
         @foreach (var item in Model)
         {
             <tr>
-                @if (this.User.IsInRole("Admin"))
+                @if (this.User.IsInRole("Customer"))
                 {
                     <th>
                         @Html.DisplayFor(modelItem => item.User.FullName)

@@ -6,32 +6,20 @@
 
 <h1>Create new vehicle</h1>
 
-<hr />
-
 <div class="row">
-
     <div class="col-md-4">
-
-        <form asp-action="Create">
-
+        <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <partial name="_MyVehicles" />
 
             <div class="form-group">
-
-                <input type="submit" value="Create" class="btn btn-primary" />
-
+                <button type="submit" value="Create" class="btn btn-primary"><i class="fa fa-save"></i> Create</button>
+                <a asp-action="Index" class="btn btn-success"><i class="fa fa-chevron-left"></i>Back to List</a>
             </div>
-
         </form>
-
     </div>
-
 </div>
-
-
-
 
 <div>
 
