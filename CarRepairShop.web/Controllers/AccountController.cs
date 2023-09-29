@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
 using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -18,16 +18,19 @@ namespace CarRepairShop.web.Controllers
     public class AccountController : Controller
     {
         private readonly IUserHelper _userHelper;
+        private readonly IMailHelper _mailHelper;
         private readonly IConfiguration _configuration;
         private readonly ICountryRepository _countryRepository;
 
         public AccountController(
             IUserHelper userHelper,
+            IMailHelper mailHelper,
             IConfiguration configuration,
             ICountryRepository countryRepository
             )
         {
             _userHelper = userHelper;
+            _mailHelper = mailHelper;
             _configuration = configuration;
             _countryRepository = countryRepository;
         }
@@ -87,6 +90,7 @@ namespace CarRepairShop.web.Controllers
                 var user = await _userHelper.GetUserByEmailAsync(model.Username);
                 await _userHelper.CheckRoleAsync("Customer");
 
+
                 if (user == null)
                 {
 
@@ -100,44 +104,46 @@ namespace CarRepairShop.web.Controllers
                         UserName = model.Username,
                         Address = model.Address,
                         PhoneNumber = model.PhoneNumber,
-                        CityId = city.Id,
+                        CityId = model.CityId,
                         City = city
-
                     };
-
 
                     var result = await _userHelper.AddUserAsync(user, model.Password);
 
                     if (result != IdentityResult.Success)
                     {
-                        ModelState.AddModelError(string.Empty, "The user couldn't be created.");
+                        ModelState.AddModelError(string.Empty, "The user couldn`t be created.");
                         return View(model);
                     }
 
-                    var loginViewModel = new LoginViewModel
+                    string myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+
+                    string tokenLink = Url.Action("ConfirmEmail", "Account", new
                     {
-                        Password = model.Password,
-                        RememberMe = false,
-                        Username = model.Username
-                    };
+                        userid = user.Id,
+                        token = myToken
+                    }, protocol: HttpContext.Request.Scheme);
 
                     await _userHelper.AddUserToRoleAsync(user, "Customer");
 
-                    var result2 = await _userHelper.LoginAsync(loginViewModel);
+                    Response response = _mailHelper.SendEmail(model.Username, "Email confirmation", $"<h1>Email Confirmation</h1>" +
+                        $"To allow the user, " +
+                        $"plase click in this link:</br></br><a href = \"{tokenLink}\">Confirm Email</a>");
 
-                    if (result2.Succeeded)
+                    if (response.IsSuccess)
                     {
-                        return RedirectToAction("Index", "Home");
+                        ViewBag.Message = "The instructions to allow you user has benn sent to email";
+                        return View(model);
                     }
 
-                    ModelState.AddModelError(string.Empty, "The user couldn't be logged.");
+                    ModelState.AddModelError(string.Empty, "The user couldn`t be loget.");
 
                 }
-
             }
 
             return View(model);
         }
+
 
         public async Task<IActionResult> ChangeUser()
         {
@@ -284,6 +290,30 @@ namespace CarRepairShop.web.Controllers
             return BadRequest();
         }
 
+        public async Task<IActionResult> ConfirmEmail(string userId, string token)
+        {
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(token))
+            {
+                return NotFound();
+            }
+
+            var user = await _userHelper.GetUserByIdAsync(userId);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var result = await _userHelper.ConfirmEmailAsync(user, token);
+
+            if (!result.Succeeded)
+            {
+
+            }
+
+            return View();
+        }
+
         public IActionResult NotAuthorized()
         {
             return View();
@@ -299,4 +329,3 @@ namespace CarRepairShop.web.Controllers
         }
     }
 }
-

@@ -72,6 +72,9 @@ namespace CarRepairShop.web.Data
 
 
                 await _userHelper.AddUserToRoleAsync(user, "Admin");
+
+                var token = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                await _userHelper.ConfirmEmailAsync(user, token);
             }
 
             var mechanicUser = await _userHelper.GetUserByEmailAsync("mechanic@gmail.com");
@@ -99,6 +102,10 @@ namespace CarRepairShop.web.Data
 
 
                 await _userHelper.AddUserToRoleAsync(mechanicUser, "Mechanic");
+
+                var token = await _userHelper.GenerateEmailConfirmationTokenAsync(mechanicUser);
+                await _userHelper.ConfirmEmailAsync(mechanicUser, token);
+
             }
 
             var customerUser = await _userHelper.GetUserByEmailAsync("customer@gmail.com");
@@ -126,6 +133,9 @@ namespace CarRepairShop.web.Data
 
 
                 await _userHelper.AddUserToRoleAsync(customerUser, "Customer");
+
+                var token = await _userHelper.GenerateEmailConfirmationTokenAsync(customerUser);
+                await _userHelper.ConfirmEmailAsync(customerUser, token);
             }
 
             var isInRole = await _userHelper.IsUserInRoleAsync(customerUser, "Customer");

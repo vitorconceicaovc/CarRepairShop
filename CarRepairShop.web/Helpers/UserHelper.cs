@@ -14,8 +14,7 @@ namespace CarRepairShop.web.Helpers
         public UserHelper(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
-            RoleManager<IdentityRole> roleManager
-            )
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -32,7 +31,10 @@ namespace CarRepairShop.web.Helpers
             await _userManager.AddToRoleAsync(user, roleName);
         }
 
-        public async Task<IdentityResult> ChangePasswordAsync(User user, string oldPassword, string newPassword)
+        public async Task<IdentityResult> ChangePasswordAsync(
+            User user,
+            string oldPassword,
+            string newPassword)
         {
             return await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
         }
@@ -40,7 +42,6 @@ namespace CarRepairShop.web.Helpers
         public async Task CheckRoleAsync(string roleName)
         {
             var roleExists = await _roleManager.RoleExistsAsync(roleName);
-
             if (!roleExists)
             {
                 await _roleManager.CreateAsync(new IdentityRole
@@ -50,9 +51,26 @@ namespace CarRepairShop.web.Helpers
             }
         }
 
+        public async Task<IdentityResult> ConfirmEmailAsync(User user, string token)
+        {
+            return await _userManager.ConfirmEmailAsync(user, token);
+        }
+
+
+        public async Task<string> GenerateEmailConfirmationTokenAsync(User user)
+        {
+            return await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        }
+
+
         public async Task<User> GetUserByEmailAsync(string email)
         {
             return await _userManager.FindByEmailAsync(email);
+        }
+
+        public async Task<User> GetUserByIdAsync(string userId)
+        {
+            return await _userManager.FindByIdAsync(userId);
         }
 
         public async Task<bool> IsUserInRoleAsync(User user, string roleName)
@@ -62,7 +80,11 @@ namespace CarRepairShop.web.Helpers
 
         public async Task<SignInResult> LoginAsync(LoginViewModel model)
         {
-            return await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, false);
+            return await _signInManager.PasswordSignInAsync(
+                model.Username,
+                model.Password,
+                model.RememberMe,
+                false);
         }
 
         public async Task LogoutAsync()
