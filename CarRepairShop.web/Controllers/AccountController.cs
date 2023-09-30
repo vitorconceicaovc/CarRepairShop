@@ -21,18 +21,24 @@ namespace CarRepairShop.web.Controllers
         private readonly IMailHelper _mailHelper;
         private readonly IConfiguration _configuration;
         private readonly ICountryRepository _countryRepository;
+        private readonly IBlobHelper _blobHelper;
+        private readonly IConverterHelper _converterHelper;
 
         public AccountController(
             IUserHelper userHelper,
             IMailHelper mailHelper,
             IConfiguration configuration,
-            ICountryRepository countryRepository
+            ICountryRepository countryRepository,
+            IBlobHelper blobHelper,
+            IConverterHelper converterHelper
             )
         {
             _userHelper = userHelper;
             _mailHelper = mailHelper;
             _configuration = configuration;
             _countryRepository = countryRepository;
+            _blobHelper = blobHelper;
+            _converterHelper = converterHelper;
         }
         public IActionResult Login()
         {
@@ -90,10 +96,15 @@ namespace CarRepairShop.web.Controllers
                 var user = await _userHelper.GetUserByEmailAsync(model.Username);
                 await _userHelper.CheckRoleAsync("Customer");
 
+                Guid imageId = Guid.Empty;
+
+                if (model.ImageFile != null && model.ImageFile.Length > 0)
+                {
+                    imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "users");
+                }
 
                 if (user == null)
                 {
-
                     var city = await _countryRepository.GetCityAsync(model.CityId);
 
                     user = new User
@@ -105,7 +116,8 @@ namespace CarRepairShop.web.Controllers
                         Address = model.Address,
                         PhoneNumber = model.PhoneNumber,
                         CityId = model.CityId,
-                        City = city
+                        City = city,
+                        ImageId = imageId
                     };
 
                     var result = await _userHelper.AddUserAsync(user, model.Password);
@@ -156,6 +168,7 @@ namespace CarRepairShop.web.Controllers
                 model.LastName = user.LastName;
                 model.Address = user.Address;
                 model.PhoneNumber = user.PhoneNumber;
+                model.ImageId = user.ImageId;   
 
                 var city = await _countryRepository.GetCityAsync(user.CityId);
 
@@ -184,10 +197,18 @@ namespace CarRepairShop.web.Controllers
 
             if (ModelState.IsValid)
             {
+            
                 var user = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
 
                 if (user != null)
                 {
+
+                    Guid imageId = Guid.Empty;
+
+                    if (model.ImageFile != null && model.ImageFile.Length > 0)
+                    {
+                        imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "users");
+                    }
 
                     var city = await _countryRepository.GetCityAsync(model.CityId);
 
@@ -197,8 +218,8 @@ namespace CarRepairShop.web.Controllers
                     user.PhoneNumber = model.PhoneNumber;
                     user.CityId = model.CityId;
                     user.City = city;
-
-
+                    user.ImageId = imageId; 
+         
                     var response = await _userHelper.UpdateUserAsync(user);
 
                     if (response.Succeeded)

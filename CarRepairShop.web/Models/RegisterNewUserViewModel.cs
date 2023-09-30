@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using CarRepairShop.web.Data.Entities;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace CarRepairShop.web.Models
 {
-    public class RegisterNewUserViewModel
+    public class RegisterNewUserViewModel 
     {
         [Required]
         [Display(Name = "First Name")]
@@ -46,5 +48,8 @@ namespace CarRepairShop.web.Models
         [Compare("Password")]
         [DataType(DataType.Password)]
         public string Confirm { get; set; }
+
+        [Display(Name = "Image")]
+        public IFormFile ImageFile { get; set; }
     }
 }

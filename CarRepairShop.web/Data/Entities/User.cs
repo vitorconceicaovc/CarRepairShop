@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
 
 namespace CarRepairShop.web.Data.Entities
 {
@@ -22,5 +22,12 @@ namespace CarRepairShop.web.Data.Entities
         [Display(Name = "Full Name")]
         public string FullName => $"{FirstName} {LastName}";
 
+        [Display(Name = "Image")]
+        public Guid ImageId { get; set; }
+
+        public string ImageFullPath => ImageId == Guid.Empty
+
+           ? "https://localhost:44397/images/noimage.jpg"
+           : $"https://carrepairshopcontainer.blob.core.windows.net/users/{ImageId}";
     }
 }
