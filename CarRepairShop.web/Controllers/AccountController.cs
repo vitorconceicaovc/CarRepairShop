@@ -2,11 +2,13 @@
 using CarRepairShop.web.Data.Entities;
 using CarRepairShop.web.Helpers;
 using CarRepairShop.web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -77,6 +79,7 @@ namespace CarRepairShop.web.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Register()
         {
             var model = new RegisterNewUserViewModel
@@ -88,6 +91,7 @@ namespace CarRepairShop.web.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Register(RegisterNewUserViewModel model)
         {
@@ -140,7 +144,9 @@ namespace CarRepairShop.web.Controllers
 
                     Response response = _mailHelper.SendEmail(model.Username, "Email confirmation", $"<h1>Email Confirmation</h1>" +
                         $"To allow the user, " +
-                        $"plase click in this link:</br></br><a href = \"{tokenLink}\">Confirm Email</a>");
+                        $"please click on this link:</br></br><a href = \"{tokenLink}\">Confirm Email</a>" +
+                        $"<p><strong>Default Password:</strong> 1234</p>" +
+                        $"<p><em>Please consider changing your password for security reasons.</em></p>");
 
                     if (response.IsSuccess)
                     {
