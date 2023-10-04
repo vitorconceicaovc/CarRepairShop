@@ -1,0 +1,49 @@
+﻿@model IEnumerable<CarRepairShop.web.Data.Entities.User>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Users List</h1>
+
+<p>
+    <a asp-controller="Account" asp-action="Register" class="btn btn-primary">Create New User</a>
+</p>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FullName)
+            </th>
+      
+            <th>
+                @Html.DisplayNameFor(model => model.ImageId)
+            </th>
+           
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FullName)
+                </td>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.ImageFullPath))
+                    {
+                        <img src="@Url.Content(item.ImageFullPath)" alt="Image" style="width:100px; height:150px;max-width:100%;height:auto">
+                    }
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Details</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
