@@ -137,6 +137,7 @@ namespace CarRepairShop.web.Controllers
                     string tokenLink = Url.Action("ConfirmEmail", "Account", new
                     {
                         userid = user.Id,
+                        Role = "Customer",
                         token = myToken
                     }, protocol: HttpContext.Request.Scheme);
 

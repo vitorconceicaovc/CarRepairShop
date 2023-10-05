@@ -1,0 +1,46 @@
+﻿@model CarRepairShop.web.Data.Entities.User
+
+@{
+	ViewData["Title"] = "Details";
+}
+
+<h1>User Details</h1>
+
+<div>
+	<hr />
+	<div class="row">
+		<div class="col-md-8">
+			<dl class="row">
+				<dt class="col-sm-3">
+					@Html.DisplayNameFor(model => model.FirstName)
+				</dt>
+				<dd class="col-sm-9">
+					@Html.DisplayFor(model => model.FirstName)
+				</dd>
+				<dt class="col-sm-3">
+					@Html.DisplayNameFor(model => model.LastName)
+				</dt>
+				<dd class="col-sm-9">
+					@Html.DisplayFor(model => model.LastName)
+				</dd>
+				<dt class="col-sm-3">
+					@Html.DisplayNameFor(model => model.Address)
+				</dt>
+				<dd class="col-sm-9">
+					@Html.DisplayFor(model => model.Address)
+				</dd>
+			</dl>
+		</div>
+		<div class="col-md-4">
+			@if (!string.IsNullOrEmpty(Model.ImageFullPath))
+			{
+				<img src="@Url.Content(Model.ImageFullPath)" alt="Image" style="width:300px; height:450px;max-width:100%;height:auto">
+			}
+		</div>
+	</div>
+</div>
+
+<div>
+	<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+	<a asp-action="Index" class="btn btn-success">Back to List</a>
+</div>

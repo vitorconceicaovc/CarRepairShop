@@ -60,7 +60,8 @@ namespace CarRepairShop.web.Data
                     PhoneNumber = "913827162",
                     Address = "Rua do Admin",
                     CityId = _context.Countries.FirstOrDefault().Cities.FirstOrDefault().Id,
-                    City = _context.Countries.FirstOrDefault().Cities.FirstOrDefault()
+                    City = _context.Countries.FirstOrDefault().Cities.FirstOrDefault(),
+                    Role = "Admin"
                 };
 
                 var result = await _userHelper.AddUserAsync(user, "123456");
@@ -90,7 +91,8 @@ namespace CarRepairShop.web.Data
                     PhoneNumber = "913827162",
                     Address = "Rua do Mechanic",
                     CityId = _context.Countries.FirstOrDefault().Cities.FirstOrDefault().Id,
-                    City = _context.Countries.FirstOrDefault().Cities.FirstOrDefault()
+                    City = _context.Countries.FirstOrDefault().Cities.FirstOrDefault(),
+                    Role = "Mechanic"
                 };
 
                 var result = await _userHelper.AddUserAsync(mechanicUser, "123456");
@@ -121,7 +123,8 @@ namespace CarRepairShop.web.Data
                     PhoneNumber = "937261536",
                     Address = "Rua do Customer",
                     CityId = _context.Countries.FirstOrDefault().Cities.FirstOrDefault().Id,
-                    City = _context.Countries.FirstOrDefault().Cities.FirstOrDefault()
+                    City = _context.Countries.FirstOrDefault().Cities.FirstOrDefault(),
+                    Role = "Customer"
                 };
 
                 var result = await _userHelper.AddUserAsync(customerUser, "123456");
