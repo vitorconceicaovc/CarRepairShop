@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Http;
 
 namespace CarRepairShop.web.Models
 {
-
     public class VehicleViewModel : Vehicle
     {
         [Display(Name = "Image")]

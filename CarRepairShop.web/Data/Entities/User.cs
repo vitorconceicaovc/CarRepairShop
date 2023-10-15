@@ -29,7 +29,7 @@ namespace CarRepairShop.web.Data.Entities
 
         public string ImageFullPath => ImageId == Guid.Empty
 
-           ? "https://localhost:44397/images/noimage.jpg"
+           ? "https://carrepairshopweb.azurewebsites.net/images/noimage.jpg"
            : $"https://carrepairshopcontainer.blob.core.windows.net/users/{ImageId}";
     }
 }
